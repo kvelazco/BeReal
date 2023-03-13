@@ -48,9 +48,16 @@ class FeedViewController: UIViewController {
         // 5. TODO: Pt 2 - Limit max number of returned posts
 
                            
+//        let query = Post.query()
+//            .include("user")
+//            .order([.descending("createdAt")])
+        
+        let yesterdayDate = Calendar.current.date(byAdding: .day, value: (-1), to: Date())!
         let query = Post.query()
             .include("user")
             .order([.descending("createdAt")])
+            .where("createdAt" >= yesterdayDate) // <- Only include results created yesterday onwards
+            .limit(10) // <- Limit max number of returned posts to 10
 
         // Find and return posts that meet query criteria (async)
         query.find { [weak self] result in
